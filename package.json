@@ -1,0 +1,27 @@
+{
+  "name": "schema-alchemia",
+  "version": "1.0.0",
+  "description": "This is a NPM module to translate datasets based on schema models, the module is also able to run scripts defined on the model to make data transformation and map reduce.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hadock/schema-alchemia.git"
+  },
+  "keywords": [
+    "schema",
+    "database",
+    "map-reduce",
+    "dataset",
+    "translator",
+    "migration"
+  ],
+  "author": "Sergio Barraza",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hadock/schema-alchemia/issues"
+  },
+  "homepage": "https://github.com/hadock/schema-alchemia#readme"
+}
