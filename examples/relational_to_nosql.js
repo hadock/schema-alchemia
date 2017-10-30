@@ -24,7 +24,11 @@ var data = {
 }
 
 
-var schema_transformation = new alchemia({schema_name_1: schema1, schema_name_2: schema2});
+var schema_transformation = new alchemia({
+    schema_name_1: schema1, 
+    schema_name_2: schema2
+});
+
 schema_transformation.set_source_schema('schema_name_1', data);
 schema_transformation.set_target_schema('schema_name_2');
 
