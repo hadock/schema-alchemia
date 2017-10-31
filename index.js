@@ -51,12 +51,12 @@ class Schema_Alchemia{
     
     transform(){
         if(this[this.current_source].group_by){
-            console.log('multiples documentos');
+            console.log('Multiple documents -> group_by');
             //es un arreglo de datos con con el mismo schema
-            for(var data_indx in this[this.current_source].data){
+            for(let data_indx in this[this.current_source].data){
                 this.current_data = this[this.current_source].data[data_indx];
                 //console.log(this.current_data);
-                for(var prop in this[this.current_source].schema){
+                for(let prop in this[this.current_source].schema){
                     //read source
                     let value = this.__read_write(this.current_data, prop);
                     //write translation
@@ -70,9 +70,33 @@ class Schema_Alchemia{
                 
             }
             return this[this.current_target].translated;
+        }else if(Array.isArray(this[this.current_source].data)){
+            console.log('Multiple documents -> no group_by');
+            //es un arreglo de datos con con el mismo schema
+            var doc = 0;
+            for(let data_indx in this[this.current_source].data){
+                this.current_data = this[this.current_source].data[data_indx];
+                //console.log(this.current_data);
+                for(let prop in this[this.current_source].schema){
+                    //read source
+                    let value = this.__read_write(this.current_data, prop);
+                    //write translation
+                    //console.log('targeting:', this[this.current_target]);
+                    if(!Array.isArray(this[this.current_target].translated)){
+                        this[this.current_target].translated = [];
+                    }
+                    if(typeof this[this.current_target].translated[doc] === 'undefined'){
+                        this[this.current_target].translated[doc] = {};
+                    }
+                    //console.log(this[this.current_target].translated[this.current_data[this[this.current_source].group_by]]);
+                    this.__read_write(this[this.current_target].translated[doc], this[this.current_source].schema[prop], value);
+                }
+                doc++;
+            }
+            return this[this.current_target].translated;
         }else{
             //es solo un documento con el schema definido
-            console.log('un solo documento');
+            console.log('Single document');
             this.current_data = this[this.current_source].data;
             for(var prop in this[this.current_source].schema){
                 //read source
@@ -101,6 +125,7 @@ class Schema_Alchemia{
                 console.error('script_failed: value:', value);
                 console.error('script_failed: script:', field_addr.script);
                 result = '';
+                throw e;
             }
             this.__read_write(obj, field_addr.target, result);
         }else if (field_addr.length==1 && value!==undefined){
