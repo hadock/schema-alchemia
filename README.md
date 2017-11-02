@@ -10,11 +10,11 @@ This is a NPM module to translate datasets based on schema models, the module is
 
 # README.md
 
-**Examples of usage**
-#####Install
+####**Examples of usage**
+####Install
 <pre>npm install --save schema_alchemia</pre>
 
-#####Basic usage (Single document transformation)
+####Basic usage (Single document transformation)
 <pre>
 'use strict'
 var alchemia = require('schema_alchemia');
@@ -55,7 +55,7 @@ schema_transformation.set_target_schema('schema_name_2');
 var result = schema_transformation.transform();
 </pre>
 
-######The result will be something like:
+#####The result will be something like:
 
 ```
 {
@@ -67,7 +67,7 @@ var result = schema_transformation.transform();
 }
 ```
 
-#####Basic usage (Multiple document transformation)
+####Basic usage (Multiple document transformation)
 
 |user_id | user_name | user_phone
 |:--------:|:-----------:|:-----------:|
@@ -99,7 +99,7 @@ schema_transformation.set_target_schema('schema_name_2');
 var result = schema_transformation.transform();
 </pre>
 
-######The result will be something like:
+#####The result will be something like:
 
 ```
 [
@@ -120,4 +120,104 @@ var result = schema_transformation.transform();
 ]
 ```
 
+####Advance usage (Multiple document transformation)
+#####Data transformation using scripts defined in the schema definition
 
+|user_id | user_name | user_phone
+|:--------:|:-----------:|:-----------:|
+| 10 | Jhon Doe | +14151234567 |
+| 11 | Jenny Smith | +14151234321 |
+
+<pre>
+var schema1 = {
+    "user_id": "user.id",
+    "user_name": "user.name",
+    "user_phone": {
+        "target": "user.phone",
+        "script": "() => { if(!value){ return ''; } return value.substring(0,2) + '-(' + value.substring(2,5) + ')-' + value.substring(5, 8) + '-' + value.substring(8,12); }"
+    },
+}
+
+var schema2 = {
+    "user.id": "user_id",
+    "user.name": "user_name",
+    "user.phone": {
+        "target": "user_phone",
+        "script": "() => { return value.replace( new RegExp('[^+0-9,]+','g'), '');}"
+    }
+}
+
+var data = [
+    {
+        "user_id": 10,
+        "user_name": "John Doe",
+        "user_phone": "+14151234567"
+    },
+    {
+        "user_id": 11,
+        "user_name": "Jenny Smith",
+        "user_phone": "+14151234321"
+    }
+]
+
+var schema_transformation = new alchemia({
+    schema_name_1: schema1, 
+    schema_name_2: schema2
+});
+
+schema_transformation.set_source_schema('schema_name_1', data);
+schema_transformation.set_target_schema('schema_name_2');
+
+let result_1 = schema_transformation.transform();
+
+console.log(JSON.stringify(result_1,null,2));
+</pre>
+
+#####The result will be something like:
+######The phone number has been formated with a simple script in the definition
+
+```
+[
+  {
+    "user": {
+      "id": 10,
+      "name": "John Doe",
+      "phone": "+1-(415)-123-4567"
+    }
+  },
+  {
+    "user": {
+      "id": 11,
+      "name": "Jenny Smith",
+      "phone": "+1-(415)-123-4321"
+    }
+  }
+]
+```
+
+######Now we can go backward using the same `result_1` and the `schema1` as the target schema
+
+<pre>
+schema_transformation.set_source_schema('schema_name_2', result_1);
+schema_transformation.set_target_schema('schema_name_1');
+
+let result_2 = schema_transformation.transform();
+console.log(JSON.stringify(result_2,null,2));
+</pre>
+
+######The result will be the same as the initial data:
+######Take a look in the phone number, has been converted based in the script defined in the `schema2`
+```
+[
+  {
+    "user_id": 10,
+    "user_name": "John Doe",
+    "user_phone": "+14151234567"
+  },
+  {
+    "user_id": 11,
+    "user_name": "Jenny Smith",
+    "user_phone": "+14151234321"
+  }
+]
+```
