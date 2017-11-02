@@ -51,7 +51,7 @@ class Schema_Alchemia{
     
     transform(){
         if(this[this.current_source].group_by){
-            console.log('Multiple documents -> group_by');
+            //console.log('Multiple documents -> group_by');
             //es un arreglo de datos con con el mismo schema
             for(let data_indx in this[this.current_source].data){
                 this.current_data = this[this.current_source].data[data_indx];
@@ -71,7 +71,7 @@ class Schema_Alchemia{
             }
             return this[this.current_target].translated;
         }else if(Array.isArray(this[this.current_source].data)){
-            console.log('Multiple documents -> no group_by');
+            //console.log('Multiple documents -> no group_by');
             //es un arreglo de datos con con el mismo schema
             var doc = 0;
             for(let data_indx in this[this.current_source].data){
@@ -96,7 +96,7 @@ class Schema_Alchemia{
             return this[this.current_target].translated;
         }else{
             //es solo un documento con el schema definido
-            console.log('Single document');
+            //console.log('Single document');
             this.current_data = this[this.current_source].data;
             for(var prop in this[this.current_source].schema){
                 //read source
