@@ -121,6 +121,7 @@ var result = schema_transformation.transform();
 ```
 
 ####Advance usage (Multiple document transformation)
+
 #####Data transformation using scripts defined in the schema definition
 
 |user_id | user_name | user_phone
@@ -174,6 +175,7 @@ console.log(JSON.stringify(result_1,null,2));
 </pre>
 
 #####The result will be something like:
+
 ######The phone number has been formated with a simple script in the definition
 
 ```
@@ -206,6 +208,7 @@ console.log(JSON.stringify(result_2,null,2));
 </pre>
 
 ######The result will be the same as the initial data:
+
 ######Take a look in the phone number, has been converted based in the script defined in the `schema2`
 ```
 [
@@ -220,4 +223,101 @@ console.log(JSON.stringify(result_2,null,2));
     "user_phone": "+14151234321"
   }
 ]
+```
+
+####Advance usage (Performing Map-Reduce based on scripts defined on the schema)
+
+#####The schema definition changes a little bit but, it's a simple way to reduce duplicated data into a single document
+
+| user_id | user_name | user_phone | phone_type |
+|:--------:|:-----------:|:-----------:|:-----------:|
+| 10 | Jhon Doe | +14151234567 | celphone |
+| 10 | Jhon Doe | +14153214098 | fax |
+| 11 | Jenny Smith | +14151234321 | celphone |
+
+#####The source code for this example
+
+<pre>
+var schema1 = {
+    "group_by": "user_id",
+    "model": {
+        "user_id": "user.id",
+        "user_name": "user.name",
+        "user_phone": {
+            "target": "user.phone",
+            "script": "() => { if(!Array.isArray(obj.user.phone)){ return [{type: data_source.phone_type, number: value}];} obj.user.phone.push({type: data_source.phone_type, number: value}) }"
+        }
+    }
+}
+
+var schema2 = {}
+
+var data = [
+    {
+        "user_id": 10,
+        "user_name": "John Doe",
+        "user_phone": "+14151234567",
+        "phone_type": "celphone"
+    },
+    {
+        "user_id": 10,
+        "user_name": "Jhon Doe",
+        "user_phone": "+14153214098",
+        "phone_type": "fax"
+    },
+    {
+        "user_id": 11,
+        "user_name": "Jenny Smith",
+        "user_phone": "+14151234321",
+        "phone_type": "celphone"
+    }
+]
+
+var schema_transformation = new alchemia({
+    schema_name_1: schema1, 
+    schema_name_2: schema2
+});
+
+schema_transformation.set_source_schema('schema_name_1', data);
+schema_transformation.set_target_schema('schema_name_2');
+
+let result_1 = schema_transformation.transform();
+
+console.log(JSON.stringify(result_1,null,2));
+
+</pre>
+
+######The result will be something like
+
+```
+{
+  "10": {
+    "user": {
+      "id": 10,
+      "name": "Jhon Doe",
+      "phone": [
+        {
+          "type": "celphone",
+          "number": "+14151234567"
+        },
+        {
+          "type": "fax",
+          "number": "+14153214098"
+        }
+      ]
+    }
+  },
+  "11": {
+    "user": {
+      "id": 11,
+      "name": "Jenny Smith",
+      "phone": [
+        {
+          "type": "celphone",
+          "number": "+14151234321"
+        }
+      ]
+    }
+  }
+}
 ```
