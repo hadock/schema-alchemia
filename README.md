@@ -257,7 +257,7 @@ var data = [
         "user_id": 10,
         "user_name": "John Doe",
         "user_phone": "+14151234567",
-        "phone_type": "celphone"
+        "phone_type": "cellphone"
     },
     {
         "user_id": 10,
@@ -269,7 +269,7 @@ var data = [
         "user_id": 11,
         "user_name": "Jenny Smith",
         "user_phone": "+14151234321",
-        "phone_type": "celphone"
+        "phone_type": "cellphone"
     }
 ]
 
@@ -297,7 +297,7 @@ console.log(JSON.stringify(result_1,null,2));
       "name": "Jhon Doe",
       "phone": [
         {
-          "type": "celphone",
+          "type": "cellphone",
           "number": "+14151234567"
         },
         {
@@ -313,7 +313,7 @@ console.log(JSON.stringify(result_1,null,2));
       "name": "Jenny Smith",
       "phone": [
         {
-          "type": "celphone",
+          "type": "cellphone",
           "number": "+14151234321"
         }
       ]
