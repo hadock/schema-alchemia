@@ -1,6 +1,6 @@
 {
   "name": "schema-alchemia",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "This is a NPM module to translate datasets based on schema models, the module is also able to run scripts defined on the model to make data transformation and map reduce.",
   "main": "index.js",
   "scripts": {
