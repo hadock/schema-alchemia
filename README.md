@@ -231,9 +231,9 @@ console.log(JSON.stringify(result_2,null,2));
 
 | user_id | user_name | user_phone | phone_type |
 |:--------:|:-----------:|:-----------:|:-----------:|
-| 10 | Jhon Doe | +14151234567 | celphone |
+| 10 | Jhon Doe | +14151234567 | cellphone |
 | 10 | Jhon Doe | +14153214098 | fax |
-| 11 | Jenny Smith | +14151234321 | celphone |
+| 11 | Jenny Smith | +14151234321 | cellphone |
 
 #####The source code for this example
 
