@@ -48,7 +48,7 @@ var data = {
 var schema_transformation = new alchemia({
     schema_name_1: schema1, 
     schema_name_2: schema2,
-    ignore_data_null:true //it can be ignored, by default it is false
+    ignore_null_source:true //it can be ignored, by default it is false
 });
 
 schema_transformation.set_source_schema('schema_name_1', data);
