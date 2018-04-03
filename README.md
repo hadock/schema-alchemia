@@ -1,7 +1,7 @@
 # Schema-Alchemia
 This is a NPM module to translate datasets based on schema models, the module is also able to run scripts defined on the model to make data transformation and map reduce.
 
-###Features
+### Features
 
 - Data transformation useful to migrate between different DBs
 - Map-reduce capabilities
@@ -10,12 +10,12 @@ This is a NPM module to translate datasets based on schema models, the module is
 
 # README.md
 
-####**Examples of usage**
-####Install
+### Examples of usage
+### Install
 <pre>npm install --save schema_alchemia</pre>
 
-####Basic usage (Single document transformation)
-<pre>
+### Basic usage (Single document transformation)
+```javascript
 'use strict'
 var alchemia = require('schema_alchemia');
 
@@ -30,14 +30,13 @@ var schema2 = {
     "user.name": "user_name",
     "user.phone": "user_phone"
 }
-
-</pre>
+```
 
 |user_id | user_name | user_phone
 |:--------:|:-----------:|:-----------:|
 | 10 | Jhon Doe | +1415123456 |
 
-<pre>
+```javascript
 var data = {
     "user_id": 10,
     "user_name": "John Doe",
@@ -46,16 +45,17 @@ var data = {
 
 var schema_transformation = new alchemia({
     schema_name_1: schema1, 
-    schema_name_2: schema2
+    schema_name_2: schema2,
+    ignore_data_null:true //it can be ignored, by default it is false
 });
 
 schema_transformation.set_source_schema('schema_name_1', data);
 schema_transformation.set_target_schema('schema_name_2');
 
 var result = schema_transformation.transform();
-</pre>
+```
 
-#####The result will be something like:
+### The result will be something like:
 
 ```
 {
@@ -67,14 +67,14 @@ var result = schema_transformation.transform();
 }
 ```
 
-####Basic usage (Multiple document transformation)
+### Basic usage (Multiple document transformation)
 
 |user_id | user_name | user_phone
 |:--------:|:-----------:|:-----------:|
 | 10 | Jhon Doe | +1415123456 |
 | 11 | Jenny Smith | +1415187456 |
 
-<pre>
+```javascript
 var data = [
     {
         "user_id": 10,
@@ -97,11 +97,11 @@ schema_transformation.set_source_schema('schema_name_1', data);
 schema_transformation.set_target_schema('schema_name_2');
 
 var result = schema_transformation.transform();
-</pre>
-
-#####The result will be something like:
-
 ```
+
+### The result will be something like:
+
+```javascript
 [
   {
     "user": {
@@ -120,16 +120,16 @@ var result = schema_transformation.transform();
 ]
 ```
 
-####Advance usage (Multiple document transformation)
+### Advance usage (Multiple document transformation)
 
-#####Data transformation using scripts defined in the schema definition
+### Data transformation using scripts defined in the schema definition
 
 |user_id | user_name | user_phone
 |:--------:|:-----------:|:-----------:|
 | 10 | Jhon Doe | +14151234567 |
 | 11 | Jenny Smith | +14151234321 |
 
-<pre>
+```javascript
 var schema1 = {
     "user_id": "user.id",
     "user_name": "user.name",
@@ -172,13 +172,13 @@ schema_transformation.set_target_schema('schema_name_2');
 let result_1 = schema_transformation.transform();
 
 console.log(JSON.stringify(result_1,null,2));
-</pre>
-
-#####The result will be something like:
-
-######The phone number has been formated with a simple script in the definition
-
 ```
+
+### The result will be something like:
+
+#### The phone number has been formated with a simple script in the definition
+
+```javascript
 [
   {
     "user": {
@@ -197,20 +197,20 @@ console.log(JSON.stringify(result_1,null,2));
 ]
 ```
 
-######Now we can go backward using the same `result_1` and the `schema1` as the target schema
+#### Now we can go backward using the same `result_1` and the `schema1` as the target schema
 
-<pre>
+```javascript
 schema_transformation.set_source_schema('schema_name_2', result_1);
 schema_transformation.set_target_schema('schema_name_1');
 
 let result_2 = schema_transformation.transform();
 console.log(JSON.stringify(result_2,null,2));
-</pre>
-
-######The result will be the same as the initial data:
-
-######Take a look in the phone number, has been converted based in the script defined in the `schema2`
 ```
+
+#### The result will be the same as the initial data:
+
+#### Take a look in the phone number, has been converted based in the script defined in the `schema2`
+```javascript
 [
   {
     "user_id": 10,
@@ -225,9 +225,9 @@ console.log(JSON.stringify(result_2,null,2));
 ]
 ```
 
-####Advance usage (Performing Map-Reduce based on scripts defined on the schema)
+#### Advance usage (Performing Map-Reduce based on scripts defined on the schema)
 
-#####The schema definition changes a little bit but, it's a simple way to reduce duplicated data into a single document
+##### The schema definition changes a little bit but, it's a simple way to reduce duplicated data into a single document
 
 | user_id | user_name | user_phone | phone_type |
 |:--------:|:-----------:|:-----------:|:-----------:|
@@ -235,9 +235,9 @@ console.log(JSON.stringify(result_2,null,2));
 | 10 | Jhon Doe | +14153214098 | fax |
 | 11 | Jenny Smith | +14151234321 | cellphone |
 
-#####The source code for this example
+##### The source code for this example
 
-<pre>
+```javascript
 var schema1 = {
     "group_by": "user_id",
     "model": {
@@ -285,11 +285,11 @@ let result_1 = schema_transformation.transform();
 
 console.log(JSON.stringify(result_1,null,2));
 
-</pre>
-
-######The result will be something like
-
 ```
+
+##### The result will be something like
+
+```javascript
 {
   "10": {
     "user": {
