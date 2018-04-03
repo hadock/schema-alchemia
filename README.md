@@ -12,7 +12,9 @@ This is a NPM module to translate datasets based on schema models, the module is
 
 ### Examples of usage
 ### Install
-<pre>npm install --save schema_alchemia</pre>
+```sh
+npm install --save schema_alchemia
+```
 
 ### Basic usage (Single document transformation)
 ```javascript
@@ -57,7 +59,7 @@ var result = schema_transformation.transform();
 
 ### The result will be something like:
 
-```
+```javascript
 {
 	user: { 
 		id: 10, 
@@ -207,7 +209,7 @@ let result_2 = schema_transformation.transform();
 console.log(JSON.stringify(result_2,null,2));
 ```
 
-#### The result will be the same as the initial data:
+#### The result will be the same as the initial data:
 
 #### Take a look in the phone number, has been converted based in the script defined in the `schema2`
 ```javascript
