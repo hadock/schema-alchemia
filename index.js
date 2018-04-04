@@ -11,11 +11,28 @@ class Schema_Alchemia {
 
     if (Object.getOwnPropertyNames(schema_rules).length >= 1) {
       for (var prop in schema_rules) {
-        if (typeof schema_rules[prop].group_by === 'undefined') {
-          this[prop] = { is_source: false, is_target: false, group_by: false, schema: schema_rules[prop], data: {}, translated: {} };
+        if (prop === 'ignore_null_source' && typeof schema_rules.ignore_null_source === 'boolean') {
+          this.ignore_data_null = schema_rules.ignore_null_source;
+        }
+        else if (typeof schema_rules[prop].group_by === 'undefined') {
+          this[prop] = {
+            is_source: false,
+            is_target: false,
+            group_by: false,
+            schema: schema_rules[prop],
+            data: {},
+            translated: {}
+          };
         }
         else {
-          this[prop] = { is_source: false, is_target: false, group_by: schema_rules[prop].group_by, schema: schema_rules[prop].model, data: {}, translated: {} };
+          this[prop] = {
+            is_source: false,
+            is_target: false,
+            group_by: schema_rules[prop].group_by,
+            schema: schema_rules[prop].model,
+            data: {},
+            translated: {}
+          };
         }
       }
     }
