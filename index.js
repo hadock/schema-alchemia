@@ -25,6 +25,7 @@ class Schema_Alchemia {
 
   set_local_functions(function_name, funct) {
     this.functions[function_name] = funct;
+    console.log("Hola Mundo")
   }
 
   //define el origen de los datos a ser manipulados
