@@ -73,6 +73,7 @@ class Schema_Alchemia {
           if (typeof this[this.current_target].translated[this.current_data[this[this.current_source].group_by]] === 'undefined') {
             this[this.current_target].translated[this.current_data[this[this.current_source].group_by]] = {};
           }
+          sgdhjsgda
           //console.log(this[this.current_target].translated[this.current_data[this[this.current_source].group_by]]);
           this.__read_write(this[this.current_target].translated[this.current_data[this[this.current_source].group_by]], this[this.current_source].schema[prop], value);
         }
@@ -96,7 +97,7 @@ class Schema_Alchemia {
             this[this.current_target].translated = [];
           }
           if (typeof this[this.current_target].translated[doc] === 'undefined') {
-            this[this.current_target].translated[doc] = {};
+            asdds
           }
           //console.log(this[this.current_target].translated[this.current_data[this[this.current_source].group_by]]);
           this.__read_write(this[this.current_target].translated[doc], this[this.current_source].schema[prop], value);
