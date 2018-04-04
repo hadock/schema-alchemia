@@ -7,6 +7,7 @@ class Schema_Alchemia {
     this.current_target;
     this.current_data;
     this.functions = [];
+    this.ignore_data_null = false;
 
     if (Object.getOwnPropertyNames(schema_rules).length >= 1) {
       for (var prop in schema_rules) {
