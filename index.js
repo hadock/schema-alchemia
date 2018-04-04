@@ -7,14 +7,32 @@ class Schema_Alchemia {
     this.current_target;
     this.current_data;
     this.functions = [];
+    this.ignore_data_null = false;
 
     if (Object.getOwnPropertyNames(schema_rules).length >= 1) {
       for (var prop in schema_rules) {
-        if (typeof schema_rules[prop].group_by === 'undefined') {
-          this[prop] = { is_source: false, is_target: false, group_by: false, schema: schema_rules[prop], data: {}, translated: {} };
+        if (prop === 'ignore_null_source' && typeof schema_rules.ignore_null_source === 'boolean') {
+          this.ignore_data_null = schema_rules.ignore_null_source;
+        }
+        else if (typeof schema_rules[prop].group_by === 'undefined') {
+          this[prop] = {
+            is_source: false,
+            is_target: false,
+            group_by: false,
+            schema: schema_rules[prop],
+            data: {},
+            translated: {}
+          };
         }
         else {
-          this[prop] = { is_source: false, is_target: false, group_by: schema_rules[prop].group_by, schema: schema_rules[prop].model, data: {}, translated: {} };
+          this[prop] = {
+            is_source: false,
+            is_target: false,
+            group_by: schema_rules[prop].group_by,
+            schema: schema_rules[prop].model,
+            data: {},
+            translated: {}
+          };
         }
       }
     }
@@ -60,11 +78,12 @@ class Schema_Alchemia {
   transform() {
     if (this[this.current_source].group_by) {
       //console.log('Multiple documents -> group_by');
-      //es un arreglo de datos con con el mismo schema
+      //es un arreglo de datos con el mismo schema
       for (let data_indx in this[this.current_source].data) {
         this.current_data = this[this.current_source].data[data_indx];
         //console.log(this.current_data);
         for (let prop in this[this.current_source].schema) {
+          if (this.ignore_data_null && (typeof this.current_data[prop] == 'undefined' || this.current_data[prop] == null)) continue;
           //read source
           let value = this.__read_write(this.current_data, prop);
           //write translation
@@ -81,12 +100,13 @@ class Schema_Alchemia {
     }
     else if (Array.isArray(this[this.current_source].data)) {
       //console.log('Multiple documents -> no group_by');
-      //es un arreglo de datos con con el mismo schema
+      //es un arreglo de datos con el mismo schema
       var doc = 0;
       for (let data_indx in this[this.current_source].data) {
         this.current_data = this[this.current_source].data[data_indx];
         //console.log(this.current_data);
         for (let prop in this[this.current_source].schema) {
+          if (this.ignore_data_null && (typeof this.current_data[prop] == 'undefined' || this.current_data[prop] == null)) continue;
           //read source
           let value = this.__read_write(this.current_data, prop);
           //write translation
@@ -109,6 +129,7 @@ class Schema_Alchemia {
       //console.log('Single document');
       this.current_data = this[this.current_source].data;
       for (var prop in this[this.current_source].schema) {
+        if (this.ignore_data_null && (typeof this.current_data[prop] == 'undefined' || this.current_data[prop] == null)) continue;
         //read source
         let value = this.__read_write(this[this.current_source].data, prop);
 
