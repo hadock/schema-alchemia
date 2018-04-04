@@ -29,7 +29,6 @@ class Schema_Alchemia {
             is_source: false,
             is_target: false,
             group_by: schema_rules[prop].group_by,
-            is_null: typeof schema_rules[prop]["ignore_null"] !== 'undefined' ? schema_rules[prop].ignore_null : false,
             schema: schema_rules[prop].model,
             data: {},
             translated: {}
